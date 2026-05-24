@@ -1433,6 +1433,8 @@ section { position: relative; padding: clamp(80px, 10vw, 140px) 0; }
 
 /* ============ Why Scotia ============ */
 .why { background: var(--paper-2); }
+.why .section-head h2 .serif { color: var(--scotia-red); }
+.why .eyebrow::before { background: var(--scotia-red); }
 .compare {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1501,7 +1503,7 @@ section { position: relative; padding: clamp(80px, 10vw, 140px) 0; }
 }
 .compare-list .ico.x { background: var(--n-100); color: var(--fg-3); }
 .compare-list .ico.dot { background: var(--n-100); color: var(--fg-3); font-size: 11px; }
-.compare-list .ico.chk { background: var(--scene-red); color: var(--white); }
+.compare-list .ico.chk { background: var(--positive); color: var(--white); }
 .compare-card.ours .compare-list .ico.x { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
 .compare-card.ours .compare-list .ico.dot { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
 
@@ -1523,7 +1525,7 @@ section { position: relative; padding: clamp(80px, 10vw, 140px) 0; }
 .compare-kicker em {
   font-family: var(--font-serif);
   font-style: italic;
-  color: var(--scene-red);
+  color: var(--scotia-red);
   font-weight: 400;
 }
 
