@@ -1,0 +1,2478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scene+ Invest — Your points. Your first investment.</title>
+<meta name="description" content="Allocate your Scene+ points into mock Scotia TFSAs, ETFs and GICs. Real market data. Zero real money. Until you're ready." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<script>
+  // Arm CSS-driven entry animations only when JS is alive.
+  // (Static captures without JS see the final/visible state.)
+  document.documentElement.classList.add('js-anim');
+</script>
+<style>
+/* ============ Tokens ============ */
+:root {
+  /* Primary (Galaxy Purple) — every CTA, every brand accent, italic serif moment */
+  --scene-red:        #9B43FF;
+  --scene-red-deep:   #7F2DD8;
+  --scene-red-bright: #B36DFF;
+  --scene-red-tint:   #F0E6FF;
+
+  --ink:    #0A0A0A;
+  --ink-2:  #1A1A1A;
+  --ink-3:  #2A2A2A;
+
+  --paper:   #FAFAF7;
+  --paper-2: #F4F3EE;
+  --white:   #FFFFFF;
+
+  --n-50:  #F7F6F2;
+  --n-100: #ECEBE5;
+  --n-200: #DDDBD3;
+  --n-300: #C4C1B7;
+  --n-400: #A09D92;
+  --n-500: #7A776D;
+  --n-600: #565449;
+  --n-700: #3A382F;
+  --n-800: #232218;
+
+  /* Semantic palette */
+  --positive:        #23B574;   /* Jungle Green — gains */
+  --positive-tint:   #DDF3E8;
+  --negative:        #FF3B48;   /* Strawberry Red — losses, warnings */
+  --negative-deep:   #D6232F;
+  --negative-tint:   #FFE5E8;
+  --info:            #2C76EC;   /* Crayola Blue — ETF, information */
+  --info-tint:       #E0EDFC;
+  --warm:            #FF93AA;   /* Cotton Candy — soft, balanced asset, hero atmosphere */
+  --warm-tint:       #FFE9EF;
+
+  --fg-1: var(--ink);
+  --fg-2: var(--n-600);
+  --fg-3: var(--n-500);
+
+  --border:        rgba(10, 10, 10, 0.08);
+  --border-strong: rgba(10, 10, 10, 0.16);
+
+  --font-sans:    'Geist', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif:   'Instrument Serif', Georgia, serif;
+  --font-mono:    'Geist Mono', ui-monospace, monospace;
+
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  24px;
+  --r-2xl: 32px;
+  --r-pill: 999px;
+
+  --shadow-sm:  0 2px 8px rgba(10, 10, 10, 0.04), 0 1px 2px rgba(10, 10, 10, 0.04);
+  --shadow-md:  0 8px 24px rgba(10, 10, 10, 0.06), 0 2px 6px rgba(10, 10, 10, 0.04);
+  --shadow-lg:  0 24px 64px -16px rgba(10, 10, 10, 0.18), 0 8px 24px -8px rgba(10, 10, 10, 0.08);
+  --shadow-xl:  0 40px 96px -24px rgba(10, 10, 10, 0.24), 0 12px 32px -8px rgba(10, 10, 10, 0.10);
+  --shadow-red: 0 16px 40px -12px rgba(155, 67, 255, 0.45);
+
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast:    140ms;
+  --dur-base:    220ms;
+  --dur-slow:    420ms;
+
+  --container: 1200px;
+  --pad: clamp(20px, 4vw, 48px);
+  --nav-h: 72px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  color: var(--fg-1);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+::selection { background: var(--scene-red); color: var(--white); }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; }
+img, svg { display: block; max-width: 100%; }
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding-inline: var(--pad);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.eyebrow::before {
+  content: "";
+  width: 6px; height: 6px;
+  background: var(--scene-red);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ============ Buttons ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 22px;
+  border-radius: var(--r-pill);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  border: 1px solid transparent;
+  transition: transform var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out),
+              background var(--dur-base) var(--ease-out),
+              color var(--dur-base) var(--ease-out);
+  white-space: nowrap;
+}
+.btn:active { transform: translateY(1px) scale(0.99); }
+.btn-primary {
+  background: var(--scene-red);
+  color: var(--white);
+  box-shadow: var(--shadow-red);
+}
+.btn-primary:hover {
+  background: var(--scene-red-deep);
+  box-shadow: 0 24px 56px -12px rgba(155, 67, 255, 0.6);
+  transform: translateY(-1px);
+}
+.btn-primary.lg { padding: 18px 30px; font-size: 17px; }
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--border-strong);
+}
+.btn-ghost:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn-ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn-ink:hover { background: var(--ink-3); }
+
+.arrow-r {
+  width: 16px; height: 16px;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.btn:hover .arrow-r { transform: translateX(4px); }
+
+/* ============ Nav ============ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  z-index: 100;
+  background: rgba(250, 250, 247, 0.72);
+  backdrop-filter: saturate(140%) blur(14px);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur-base) var(--ease-out),
+              background var(--dur-base) var(--ease-out);
+}
+.nav.scrolled { border-bottom-color: var(--border); }
+.nav .container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+.logo-img {
+  height: 34px;
+  width: auto;
+  display: block;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.logo:hover .logo-img { transform: scale(1.04); }
+.logo-suffix {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink);
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-left: 2px;
+  position: relative;
+  top: 2px;
+}
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  font-size: 14px;
+  color: var(--fg-2);
+  font-weight: 500;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.nav-links a:hover { color: var(--fg-1); }
+.nav-cta { display: flex; gap: 10px; align-items: center; }
+.nav-signin {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg-1);
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+}
+.nav-signin:hover { background: var(--n-100); }
+.nav-btn {
+  padding: 9px 16px;
+  font-size: 14px;
+}
+@media (max-width: 720px) {
+  .nav-links { display: none; }
+}
+
+/* ============ Hero ============ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  padding-top: calc(var(--nav-h) + 24px);
+  padding-bottom: 48px;
+  overflow: hidden;
+}
+.hero > .container { position: relative; z-index: 2; }
+.hero-bg {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero-bg::before, .hero-bg::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  animation: orbit 18s ease-in-out infinite;
+}
+.hero-bg::before {
+  width: 540px; height: 540px;
+  background: radial-gradient(circle at center, rgba(155, 67, 255, 0.42), transparent 70%);
+  top: -120px; right: -120px;
+}
+.hero-bg::after {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle at center, rgba(255, 147, 170, 0.38), transparent 70%);
+  bottom: -100px; left: -80px;
+  animation-delay: -6s;
+}
+@keyframes orbit {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(40px, -30px) scale(1.08); }
+  66%      { transform: translate(-30px, 40px) scale(0.95); }
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  z-index: 1;
+  background-image:
+    linear-gradient(to right, rgba(10,10,10,0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10,10,10,0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 80%);
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 48px;
+  align-items: center;
+  min-height: calc(100vh - var(--nav-h) - 72px);
+}
+@media (max-width: 920px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 32px; }
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 14px;
+  border-radius: var(--r-pill);
+  background: rgba(10,10,10,0.04);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--fg-2);
+  margin-bottom: 28px;
+  backdrop-filter: blur(8px);
+}
+.hero-badge .dot {
+  width: 7px; height: 7px;
+  background: var(--scene-red);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(155,67,255,0.18);
+  animation: pulse 2s ease-in-out infinite;
+}
+.hero-badge .tag {
+  margin-left: 6px;
+  padding: 3px 10px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(155,67,255,0.18); }
+  50%      { box-shadow: 0 0 0 8px rgba(155,67,255,0.05); }
+}
+
+.hero h1 {
+  font-size: clamp(56px, 8.4vw, 124px);
+  line-height: 0.94;
+  letter-spacing: -0.045em;
+  font-weight: 600;
+  margin: 0 0 24px 0;
+  text-wrap: balance;
+}
+.hero h1 .line { display: block; }
+.hero h1 .serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--scene-red);
+  letter-spacing: -0.03em;
+}
+.hero-sub {
+  font-size: clamp(17px, 1.6vw, 21px);
+  line-height: 1.45;
+  color: var(--fg-2);
+  max-width: 520px;
+  margin: 0 0 36px 0;
+  letter-spacing: -0.01em;
+}
+.hero-sub strong { color: var(--fg-1); font-weight: 600; }
+
+.hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 36px;
+  font-size: 13px;
+  color: var(--fg-3);
+}
+.hero-meta .sep { width: 1px; height: 16px; background: var(--border-strong); }
+.hero-meta strong { color: var(--fg-1); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Hero entry — kept visually static for capture reliability. */
+.fade-up { /* no-op; reserved class for future entry effects */ }
+
+/* ============ Phone mockup ============ */
+.phone-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 1400px;
+}
+.phone {
+  position: relative;
+  width: 320px;
+  height: 660px;
+  background: var(--ink);
+  border-radius: 48px;
+  padding: 10px;
+  box-shadow:
+    0 60px 120px -30px rgba(10,10,10,0.45),
+    0 30px 60px -20px rgba(155,67,255,0.22),
+    inset 0 0 0 1px rgba(255,255,255,0.06);
+  animation: float 7s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%      { transform: translateY(-14px) rotate(-1.2deg); }
+}
+.phone-screen {
+  width: 100%; height: 100%;
+  background: linear-gradient(180deg, #F7F6F2 0%, #FAFAF7 100%);
+  border-radius: 38px;
+  overflow: hidden;
+  position: relative;
+  padding: 44px 18px 18px;
+}
+.phone-notch {
+  position: absolute;
+  top: 12px; left: 50%;
+  transform: translateX(-50%);
+  width: 96px; height: 26px;
+  background: var(--ink);
+  border-radius: var(--r-pill);
+  z-index: 2;
+}
+.phone-status {
+  position: absolute;
+  top: 18px;
+  left: 24px;
+  right: 24px;
+  display: flex; justify-content: space-between;
+  font-size: 12px; font-weight: 600;
+  color: var(--ink);
+  z-index: 1;
+}
+.phone-icons { display: flex; gap: 4px; align-items: center; }
+.phone-icons svg { width: 14px; height: 14px; }
+
+.mini-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.mini-greeting { font-size: 13px; color: var(--fg-2); }
+.mini-greeting b { color: var(--fg-1); font-weight: 600; }
+.mini-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, #9B43FF, #FF93AA);
+  display: grid; place-items: center;
+  color: white; font-size: 12px; font-weight: 700;
+}
+
+.bal-card {
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 22px;
+  padding: 18px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.bal-card::before {
+  content: "";
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(155,67,255,0.6), transparent 70%);
+  filter: blur(10px);
+}
+.bal-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 6px;
+  position: relative;
+}
+.bal-num {
+  font-size: 38px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  position: relative;
+}
+.bal-num small {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: rgba(255,255,255,0.5);
+  margin-left: 4px;
+}
+.bal-delta {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.08);
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  position: relative;
+}
+.bal-delta .up { color: #6FE2A0; }
+
+.mini-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 8px;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.mini-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.mini-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--scene-red-tint);
+  color: var(--scene-red);
+  display: grid; place-items: center;
+  font-size: 14px; font-weight: 700;
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+.mini-icon.etf  { background: var(--info-tint); color: var(--info); }
+.mini-icon.gic  { background: var(--positive-tint); color: var(--positive); }
+.mini-icon.bal  { background: var(--warm-tint); color: #C53F60; }
+.mini-info { flex: 1; min-width: 0; }
+.mini-info .nm { font-size: 13px; font-weight: 600; letter-spacing: -0.01em; }
+.mini-info .sub { font-size: 11px; color: var(--fg-3); font-family: var(--font-mono); }
+.mini-pct {
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--positive);
+}
+.mini-pct.dn { color: var(--negative); }
+
+/* Floating chips around the phone */
+.float-chip {
+  position: absolute;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: var(--shadow-md);
+  display: flex; align-items: center; gap: 10px;
+  z-index: 2;
+}
+.float-chip .ico {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  display: grid; place-items: center;
+  background: var(--scene-red);
+  color: var(--white);
+  font-size: 12px;
+}
+.float-chip strong { font-weight: 600; }
+.float-chip .num { font-variant-numeric: tabular-nums; font-weight: 600; }
+.float-chip .lbl { color: var(--fg-3); font-size: 11px; }
+.float-chip.tl {
+  top: 8%; left: -8%;
+  animation: floatA 6s ease-in-out infinite;
+}
+.float-chip.br {
+  bottom: 18%; right: -6%;
+  animation: floatB 7s ease-in-out infinite;
+}
+.float-chip.bl {
+  bottom: 8%; left: -4%;
+  animation: floatC 8s ease-in-out infinite;
+}
+@keyframes floatA {
+  0%,100% { transform: translate(0,0); }
+  50%     { transform: translate(-6px,-10px); }
+}
+@keyframes floatB {
+  0%,100% { transform: translate(0,0); }
+  50%     { transform: translate(8px,-8px); }
+}
+@keyframes floatC {
+  0%,100% { transform: translate(0,0); }
+  50%     { transform: translate(-4px,8px); }
+}
+@media (max-width: 920px) {
+  .float-chip.tl { left: 0; top: 0; }
+  .float-chip.br { right: 0; bottom: 8%; }
+  .float-chip.bl { display: none; }
+}
+
+/* ============ Section scaffold ============ */
+section { position: relative; padding: clamp(80px, 10vw, 140px) 0; }
+.section-head {
+  max-width: 760px;
+  margin-bottom: 56px;
+}
+.section-head h2 {
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+  margin: 16px 0 28px;
+  text-wrap: balance;
+}
+.section-head h2 .serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--scene-red);
+  padding-bottom: 0.08em;
+  display: inline-block;
+}
+.serif.green { color: var(--positive) !important; }
+.serif.blue  { color: var(--info) !important; }
+.serif.pink  { color: #E94B6F !important; }
+.serif.red   { color: var(--negative) !important; }
+.section-head p {
+  font-size: 18px;
+  color: var(--fg-2);
+  margin: 0;
+  max-width: 620px;
+  line-height: 1.55;
+}
+
+/* Scroll-in helper — JS-gated so default state is visible */
+.js-anim .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 800ms var(--ease-out), transform 800ms var(--ease-out);
+}
+.js-anim .reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal.d1 { transition-delay: 80ms; }
+.reveal.d2 { transition-delay: 180ms; }
+.reveal.d3 { transition-delay: 280ms; }
+.reveal.d4 { transition-delay: 380ms; }
+
+/* ============ Problem ============ */
+.problem { background: var(--paper); }
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 880px) { .stat-grid { grid-template-columns: 1fr; } }
+.stat {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 40px 32px 36px;
+  transition: transform var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+.stat:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-strong);
+}
+.stat::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: var(--scene-red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.stat:hover::before { transform: scaleX(1); }
+.stat-num {
+  font-size: clamp(64px, 7vw, 112px);
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+  font-weight: 600;
+  color: var(--scene-red);
+  margin-bottom: 18px;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: flex-start;
+}
+.stat-num .unit {
+  font-size: 0.45em;
+  font-weight: 500;
+  color: var(--scene-red);
+  margin-top: 0.55em;
+  margin-left: 2px;
+  letter-spacing: -0.02em;
+}
+.stat-text {
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--fg-1);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.stat-text .small { color: var(--fg-2); font-weight: 400; display: block; margin-top: 6px; font-size: 14px;}
+
+.problem-summary {
+  margin-top: 56px;
+  padding: 32px 36px;
+  border-left: 3px solid var(--ink);
+  max-width: 760px;
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--fg-1);
+  letter-spacing: -0.01em;
+}
+.problem-summary strong { font-weight: 600; }
+.problem-summary em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--scene-red);
+  font-weight: 400;
+  font-size: 1.05em;
+}
+
+/* ============ How it works ============ */
+.how { background: var(--paper-2); }
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  position: relative;
+}
+.steps::before {
+  content: "";
+  position: absolute;
+  top: 38px;
+  left: 12%; right: 12%;
+  height: 1px;
+  background: repeating-linear-gradient(to right, var(--border-strong) 0 6px, transparent 6px 12px);
+  z-index: 0;
+}
+@media (max-width: 880px) {
+  .steps { grid-template-columns: 1fr; gap: 40px; }
+  .steps::before { display: none; }
+}
+.step {
+  position: relative;
+  z-index: 1;
+  text-align: left;
+}
+.step-icon {
+  width: 76px; height: 76px;
+  border-radius: 22px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  display: grid; place-items: center;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+.step-icon svg { width: 32px; height: 32px; stroke: var(--ink); }
+.step-icon .num {
+  position: absolute;
+  top: -8px; right: -8px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--scene-red);
+  color: var(--white);
+  display: grid; place-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+.step h3 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px 0;
+}
+.step p {
+  color: var(--fg-2);
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: 320px;
+}
+
+/* ============ The App ============ */
+.app-section { background: var(--paper); }
+.app-frame {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  position: relative;
+}
+.app-chrome {
+  height: 44px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  gap: 8px;
+  background: var(--paper-2);
+}
+.app-chrome .dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--n-300);
+}
+.app-chrome .dot.r { background: #FF5F57; }
+.app-chrome .dot.y { background: #FEBC2E; }
+.app-chrome .dot.g { background: #28C840; }
+.app-chrome .url {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--fg-3);
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  gap: 0;
+  background: var(--white);
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 5;
+}
+.tab {
+  background: none;
+  border: 0;
+  padding: 18px 4px;
+  margin-right: 28px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--fg-3);
+  position: relative;
+  transition: color var(--dur-fast);
+  letter-spacing: -0.01em;
+}
+.tab:hover { color: var(--fg-1); }
+.tab.active { color: var(--ink); font-weight: 600; }
+.tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 2px;
+  background: var(--scene-red);
+  border-radius: 2px 2px 0 0;
+}
+.tab .count {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 7px;
+  background: var(--n-100);
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--fg-2);
+  vertical-align: 1px;
+}
+.tab.active .count { background: var(--scene-red-tint); color: var(--scene-red); }
+
+.tab-panels { padding: 32px clamp(24px, 3vw, 40px) 40px; }
+.panel { display: none; }
+.panel.active {
+  display: block;
+  animation: panelIn 460ms var(--ease-out);
+}
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Portfolio ---- */
+.bal-banner {
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--r-xl);
+  padding: 28px 32px;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.bal-banner::before {
+  content: "";
+  position: absolute;
+  top: -60%; right: -10%;
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, rgba(155,67,255,0.42), transparent 60%);
+  filter: blur(20px);
+  pointer-events: none;
+}
+.bal-banner > * { position: relative; }
+.bal-banner-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 6px;
+}
+.bal-banner-amount {
+  font-size: 56px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.bal-banner-amount small {
+  font-size: 18px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  margin-left: 6px;
+  letter-spacing: 0;
+}
+.bal-banner-gain {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.bal-banner-gain .delta {
+  font-size: 22px;
+  font-weight: 600;
+  color: #6FE2A0;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.bal-banner-gain .delta.dn { color: var(--negative); }
+.bal-banner-gain .sub {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+}
+.bal-banner .btn-primary {
+  background: var(--scene-red);
+  box-shadow: 0 12px 32px -8px rgba(155,67,255,0.6);
+}
+@media (max-width: 720px) {
+  .bal-banner { grid-template-columns: 1fr; }
+  .bal-banner-amount { font-size: 44px; }
+}
+
+.invest-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+@media (max-width: 720px) { .invest-grid { grid-template-columns: 1fr; } }
+
+.invest-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px;
+  transition: transform var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) var(--ease-out);
+  cursor: pointer;
+}
+.invest-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
+}
+.invest-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.asset-icon {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  background: var(--scene-red-tint);
+  color: var(--scene-red);
+  display: grid; place-items: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.asset-icon.etf { background: var(--info-tint); color: var(--info); }
+.asset-icon.gic { background: var(--positive-tint); color: var(--positive); }
+.asset-icon.bal { background: var(--warm-tint); color: #C53F60; }
+.invest-card-name {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.invest-card-sub {
+  font-size: 12px;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+}
+.invest-card-mid {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 8px;
+}
+.invest-card-alloc {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.invest-card-alloc small {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fg-3);
+  margin-left: 4px;
+  letter-spacing: 0;
+}
+.pct {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  letter-spacing: -0.01em;
+}
+.pct.up { background: var(--positive-tint); color: var(--positive); }
+.pct.dn { background: var(--negative-tint); color: var(--negative); }
+.spark {
+  width: 100%;
+  height: 36px;
+  margin-top: 6px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+@media (max-width: 720px) { .stats-row { grid-template-columns: 1fr; } }
+.stat-tile {
+  background: var(--paper-2);
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+}
+.stat-tile .lbl {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  margin-bottom: 6px;
+}
+.stat-tile .v {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.stat-tile .v .flame {
+  font-size: 18px;
+  filter: hue-rotate(-10deg);
+}
+
+.grad-banner {
+  background: linear-gradient(135deg, var(--ink) 0%, #1A1A1A 100%);
+  color: var(--paper);
+  border-radius: var(--r-xl);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.grad-banner::after {
+  content: "";
+  position: absolute;
+  bottom: -30%; left: -10%;
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(155,67,255,0.52), transparent 60%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+.grad-banner > * { position: relative; }
+.grad-banner-text { flex: 1; }
+.grad-banner-text .eyebrow { color: rgba(255,255,255,0.6); }
+.grad-banner-text .eyebrow::before { background: var(--scene-red-bright); }
+.grad-banner-text h4 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 8px 0 0;
+}
+.grad-banner-text h4 em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--positive);
+}
+@media (max-width: 720px) {
+  .grad-banner { flex-direction: column; align-items: flex-start; }
+}
+
+/* ---- Invest tab ---- */
+.invest-intro {
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--fg-2);
+  max-width: 580px;
+  margin: 0 0 28px;
+}
+.invest-intro strong { color: var(--fg-1); font-weight: 600; }
+
+.alloc-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--paper-2);
+  border-radius: var(--r-lg);
+  padding: 18px 24px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.alloc-summary.over { border-color: var(--negative); background: var(--negative-tint); }
+.alloc-summary .label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+.alloc-summary .v {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  margin-top: 4px;
+  line-height: 1;
+}
+.alloc-summary .progress {
+  flex: 1;
+  margin: 0 28px;
+  height: 8px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  min-width: 160px;
+}
+.alloc-summary .progress-fill {
+  height: 100%;
+  background: var(--ink);
+  border-radius: var(--r-pill);
+  transition: width var(--dur-base) var(--ease-out), background var(--dur-fast);
+}
+.alloc-summary.over .progress-fill { background: var(--negative); }
+
+.slider-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+@media (max-width: 720px) { .slider-grid { grid-template-columns: 1fr; } }
+.slider-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px;
+}
+.slider-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  gap: 12px;
+}
+.slider-card-name {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.badge {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.badge.low { background: var(--positive-tint); color: var(--positive); }
+.badge.med { background: var(--warm-tint); color: #C53F60; }
+.badge.none { background: var(--n-100); color: var(--fg-2); }
+.slider-card-sub {
+  font-size: 13px;
+  color: var(--fg-3);
+  margin-bottom: 18px;
+}
+.slider-card-sub b { color: var(--fg-1); font-weight: 600; }
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 4px;
+}
+.slider-row input[type="range"] {
+  flex: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--n-100);
+  outline: none;
+}
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 3px solid var(--white);
+  box-shadow: 0 2px 8px rgba(10,10,10,0.2);
+  cursor: pointer;
+  transition: transform var(--dur-fast);
+}
+.slider-row input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.1); }
+.slider-row input[type="range"]:active::-webkit-slider-thumb { background: var(--scene-red); }
+.slider-row input[type="range"]::-moz-range-thumb {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 3px solid var(--white);
+  box-shadow: 0 2px 8px rgba(10,10,10,0.2);
+  cursor: pointer;
+}
+.slider-val {
+  width: 80px;
+  text-align: right;
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.slider-val small { color: var(--fg-3); font-weight: 500; font-size: 11px; margin-left: 2px; }
+
+.warn-bar {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--negative-tint);
+  border-radius: var(--r-md);
+  color: var(--negative-deep);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255,59,72,0.25);
+}
+.warn-bar.show { display: flex; }
+.warn-bar svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+.confirm-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* ---- Learn ---- */
+.learn-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 22px 26px;
+  background: linear-gradient(135deg, #F4F3EE 0%, #FAFAF7 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  margin-bottom: 22px;
+}
+.learn-head-text {
+  font-size: 15px;
+  color: var(--fg-2);
+}
+.learn-head-text strong { color: var(--fg-1); font-weight: 600; }
+.learn-counter {
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  color: var(--scene-red);
+}
+.learn-counter small { font-size: 14px; font-weight: 500; color: var(--fg-2); letter-spacing: 0; }
+
+.lessons { display: flex; flex-direction: column; gap: 14px; }
+.lesson {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px 26px;
+  transition: all var(--dur-base) var(--ease-out);
+  position: relative;
+}
+.lesson:hover:not(.locked) { border-color: var(--border-strong); }
+.lesson.locked { opacity: 0.55; }
+.lesson-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.lesson-num {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: var(--paper-2);
+  display: grid; place-items: center;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fg-2);
+  flex-shrink: 0;
+}
+.lesson.done .lesson-num { background: var(--positive-tint); color: var(--positive); }
+.lesson-body { flex: 1; min-width: 0; }
+.lesson h4 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.lesson .meta {
+  font-size: 13px;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+}
+.lesson .meta .sep { margin: 0 8px; opacity: 0.5; }
+.lesson .meta .reward { color: var(--scene-red); }
+.lesson-cta {
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: var(--r-pill);
+  flex-shrink: 0;
+}
+.lesson-cta.start { background: var(--ink); color: var(--paper); border: 0; }
+.lesson-cta.start:hover { background: var(--ink-3); }
+.lesson-cta.done { background: var(--positive-tint); color: var(--positive); pointer-events: none; border: 0; display: inline-flex; gap: 6px; align-items: center; }
+.lesson-cta.locked { background: var(--n-100); color: var(--fg-3); cursor: not-allowed; border: 0; display: inline-flex; gap: 6px; align-items: center; }
+
+.lesson-progress {
+  margin-top: 14px;
+  height: 4px;
+  background: var(--n-100);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  display: none;
+}
+.lesson-progress.show { display: block; }
+.lesson-progress-fill {
+  height: 100%;
+  background: var(--scene-red);
+  border-radius: var(--r-pill);
+  transition: width var(--dur-slow) var(--ease-out);
+}
+
+.lesson-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--dur-slow) var(--ease-out);
+}
+.lesson-content.open { max-height: 600px; }
+.lesson-content-inner {
+  padding-top: 22px;
+  margin-top: 22px;
+  border-top: 1px solid var(--border);
+}
+.lesson-content h5 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+.lesson-content p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--fg-2);
+  margin: 0 0 12px;
+}
+.lesson-content p:last-of-type { margin-bottom: 18px; }
+.lesson-content em.kw {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--scene-red);
+  font-weight: 400;
+}
+
+/* ============ Why Scotia ============ */
+.why { background: var(--paper-2); }
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  position: relative;
+}
+@media (max-width: 760px) { .compare { grid-template-columns: 1fr; } }
+.compare-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 36px 32px;
+  position: relative;
+}
+.compare-card.ours {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.compare-card .name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg-3);
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.compare-card.ours .name { color: rgba(255,255,255,0.5); }
+.compare-card h3 {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0 0 24px;
+}
+.compare-card h3 em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: #E94B6F;
+}
+.compare-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.compare-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+.compare-list .ico {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.compare-list .ico.x { background: var(--n-100); color: var(--fg-3); }
+.compare-list .ico.dot { background: var(--n-100); color: var(--fg-3); font-size: 11px; }
+.compare-list .ico.chk { background: var(--scene-red); color: var(--white); }
+.compare-card.ours .compare-list .ico.x { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+.compare-card.ours .compare-list .ico.dot { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+
+.compare-kicker {
+  margin-top: 56px;
+  padding: 36px 40px;
+  background: var(--white);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border);
+  text-align: left;
+  font-size: clamp(22px, 2.5vw, 32px);
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  font-weight: 500;
+  max-width: 880px;
+  margin-inline: auto;
+  text-align: center;
+}
+.compare-kicker em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--scene-red);
+  font-weight: 400;
+}
+
+/* ============ Graduation flow ============ */
+.grad { background: var(--paper); }
+.grad-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+@media (max-width: 880px) { .grad-inner { grid-template-columns: 1fr; gap: 32px; } }
+.grad-text h2 {
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+  margin: 16px 0 20px;
+  text-wrap: balance;
+}
+.grad-text h2 em,
+.grad-text h2 .serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--scene-red);
+}
+.grad-text p {
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--fg-2);
+  margin: 0 0 28px;
+  max-width: 460px;
+}
+.grad-text p strong { color: var(--fg-1); font-weight: 600; }
+
+.grad-phone {
+  background: var(--ink);
+  border-radius: 48px;
+  padding: 10px;
+  width: 320px;
+  height: 660px;
+  margin-inline: auto;
+  box-shadow: 0 60px 120px -30px rgba(10,10,10,0.45),
+              0 30px 60px -20px rgba(155,67,255,0.22);
+  position: relative;
+}
+.grad-phone .phone-screen {
+  display: flex;
+  flex-direction: column;
+  padding: 44px 18px 22px;
+}
+.grad-msg {
+  margin-top: 18px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px;
+  position: relative;
+}
+.grad-msg .from {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+}
+.grad-msg .from .av {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--ink); color: var(--paper);
+  display: grid; place-items: center;
+  font-family: var(--font-serif); font-style: italic;
+  font-size: 14px;
+}
+.grad-msg .from .lb {
+  font-size: 13px; font-weight: 600;
+}
+.grad-msg .from .tm {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+}
+.grad-msg h4 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+  line-height: 1.25;
+}
+.grad-msg h4 em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--positive);
+  font-weight: 400;
+}
+.grad-msg p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg-2);
+  margin: 0 0 14px;
+}
+.grad-comparison {
+  background: var(--paper-2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.grad-comparison .col .lbl {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  margin-bottom: 2px;
+}
+.grad-comparison .col .v {
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.grad-comparison .col .v.pos { color: var(--positive); }
+.grad-comparison .arrow svg { width: 18px; height: 18px; color: var(--fg-3); }
+.grad-msg .open-btn {
+  width: 100%;
+  background: var(--scene-red);
+  color: var(--white);
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px -8px rgba(155,67,255,0.55);
+  transition: transform var(--dur-fast);
+}
+.grad-msg .open-btn:hover { transform: translateY(-1px); }
+.grad-msg .skip {
+  text-align: center;
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--fg-3);
+}
+
+/* ============ Footer ============ */
+footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.7);
+  padding: 64px 0 36px;
+}
+footer .container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--paper);
+  letter-spacing: -0.02em;
+}
+.footer-logo .logo-chip {
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: inline-flex;
+  align-items: center;
+}
+.footer-logo .logo-chip img {
+  height: 22px;
+  width: auto;
+  display: block;
+}
+.footer-logo .suffix {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--paper);
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.footer-built {
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+}
+.footer-links {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  color: rgba(255,255,255,0.6);
+  font-size: 14px;
+  transition: color var(--dur-fast);
+}
+.footer-links a:hover { color: var(--paper); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.6;
+  letter-spacing: 0;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-bottom p { margin: 0; max-width: 720px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <div class="container">
+    <a href="#" class="logo" aria-label="Scene+ Invest">
+      <img class="logo-img" src="data:image/png;base64,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" alt="Scene+">
+      <span class="logo-suffix">Invest</span>
+    </a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#app">The app</a>
+      <a href="#why">Why Scotia</a>
+      <a href="#graduate">Graduate</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#" class="nav-signin">Sign in</a>
+      <a href="#app" class="btn btn-primary nav-btn">Get started</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-grid" aria-hidden="true"></div>
+
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="hero-badge fade-up d1">
+          <span class="dot"></span>
+          <span>Mock investing with your Scene+ points</span>
+          <span class="tag">BETA</span>
+        </div>
+        <h1>
+          <span class="line fade-up d2">Your points.</span>
+          <span class="line serif fade-up d3">Your first investment.</span>
+        </h1>
+        <p class="hero-sub fade-up d4">
+          Allocate the Scene+ points sitting in your Scotia app into mock <strong>TFSAs, ETFs and GICs</strong>. Real market data. Zero real money. Until you're ready.
+        </p>
+        <div class="hero-actions fade-up d5">
+          <a href="#app" class="btn btn-primary lg">
+            Start investing your points
+            <svg class="arrow-r" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+          <a href="#how" class="btn btn-ghost lg" style="padding:18px 24px">How it works</a>
+        </div>
+        <div class="hero-meta fade-up d5">
+          <span><strong>10M+</strong> Scotia customers</span>
+          <span class="sep"></span>
+          <span><strong>$0</strong> real money at risk</span>
+          <span class="sep"></span>
+          <span><strong>30 days</strong> to graduate</span>
+        </div>
+      </div>
+
+      <div class="phone-wrap fade-up d4">
+        <div class="float-chip tl">
+          <span class="ico">+</span>
+          <span><span class="num">+842</span> <span class="lbl">pts this week</span></span>
+        </div>
+        <div class="float-chip br">
+          <span class="ico" style="background:var(--positive)">↑</span>
+          <span><strong>TFSA</strong> <span class="lbl">+4.2%</span></span>
+        </div>
+        <div class="float-chip bl">
+          <span class="ico" style="background:var(--info)">SP</span>
+          <span><strong>S&amp;P 500</strong> <span class="lbl">+1.8% today</span></span>
+        </div>
+
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-status">
+            <span>9:41</span>
+            <div class="phone-icons">
+              <svg viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4"/><rect x="4" y="5" width="3" height="7"/><rect x="8" y="2" width="3" height="10"/><rect x="12" y="0" width="3" height="12"/></svg>
+              <svg viewBox="0 0 18 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5 Q9 -2 17 5"/><path d="M4 8 Q9 3 14 8"/><circle cx="9" cy="10.5" r="0.8" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="0.5" y="1.5" width="20" height="9" rx="2"/><rect x="2.5" y="3.5" width="14" height="5" rx="0.5" fill="currentColor"/><rect x="21.5" y="4.5" width="1.5" height="3" rx="0.5" fill="currentColor"/></svg>
+            </div>
+          </div>
+
+          <div class="phone-screen">
+            <div class="mini-header">
+              <div class="mini-greeting">Hi <b>Maya</b></div>
+              <div class="mini-avatar">M</div>
+            </div>
+
+            <div class="bal-card">
+              <div class="bal-label">Total Scene+ points</div>
+              <div class="bal-num">14,320<small>pts</small></div>
+              <div class="bal-delta"><span class="up">▲</span> +428 pts this month</div>
+            </div>
+
+            <div class="eyebrow" style="margin:14px 0 10px; font-size:10px">Your portfolio</div>
+
+            <div class="mini-card">
+              <div class="mini-icon">T</div>
+              <div class="mini-info">
+                <div class="nm">TFSA Growth</div>
+                <div class="sub">6,200 pts</div>
+              </div>
+              <div class="mini-pct">+4.2%</div>
+            </div>
+
+            <div class="mini-card">
+              <div class="mini-icon etf">S</div>
+              <div class="mini-info">
+                <div class="nm">S&amp;P 500 ETF</div>
+                <div class="sub">4,800 pts</div>
+              </div>
+              <div class="mini-pct">+1.8%</div>
+            </div>
+
+            <div class="mini-card">
+              <div class="mini-icon gic">G</div>
+              <div class="mini-info">
+                <div class="nm">1-Year GIC</div>
+                <div class="sub">3,320 pts</div>
+              </div>
+              <div class="mini-pct">+0.4%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROBLEM ============ -->
+<section class="problem" id="problem">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal">The problem</span>
+      <h2 class="reveal d1">Young Canadians aren't investing. <span class="serif blue">Not because they can't.</span></h2>
+      <p class="reveal d2">They've never been shown how. The bank already has them as customers — but the gap between a chequing account and a first investment is wider than it should be.</p>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat reveal d1">
+        <div class="stat-num">43<span class="unit">%</span></div>
+        <div class="stat-text">of young Canadians don't know where to start investing
+          <span class="small">Source: BMO Investment Survey, 2024</span>
+        </div>
+      </div>
+      <div class="stat reveal d2">
+        <div class="stat-num">84<span class="unit">%</span></div>
+        <div class="stat-text">wish they'd learned about money in school
+          <span class="small">Source: RBC Financial Literacy Poll, 2023</span>
+        </div>
+      </div>
+      <div class="stat reveal d3">
+        <div class="stat-num">1<span class="unit">in&nbsp;3</span></div>
+        <div class="stat-text">Canadians has never invested at all
+          <span class="small">Source: Statistics Canada, 2024</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="problem-summary reveal d2">
+      Scotiabank already has <strong>millions of young customers</strong> with chequing accounts who never crossed into investing. Wealthsimple stole this generation by building trust from zero. <em>We don't need to.</em> They're already in the app. They just need a bridge.
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal">How it works</span>
+      <h2 class="reveal d1">Three steps. <span class="serif green">No money required.</span></h2>
+      <p class="reveal d2">Built into the Scotia app you already have. Uses points you already earned. Mirrors products you'll eventually buy for real.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step reveal d1">
+        <div class="step-icon">
+          <span class="num">1</span>
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="16" cy="16" r="11"/>
+            <path d="M16 11v10M12 14l4-3 4 3M12 18l4 3 4-3"/>
+          </svg>
+        </div>
+        <h3>Use your Scene+ points</h3>
+        <p>Allocate the points you already have. No real money needed. No new account, no new app — it lives where your chequing already does.</p>
+      </div>
+      <div class="step reveal d2">
+        <div class="step-icon">
+          <span class="num">2</span>
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 24 L11 16 L16 21 L27 8"/>
+            <path d="M21 8h6v6"/>
+          </svg>
+        </div>
+        <h3>Invest in real products</h3>
+        <p>Your points mirror Scotia's actual TFSAs, ETFs, and GICs — using live market data. You see exactly how the real product would perform.</p>
+      </div>
+      <div class="step reveal d3">
+        <div class="step-icon">
+          <span class="num">3</span>
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 12 L16 6 L24 12"/>
+            <path d="M11 12v14h10V12"/>
+            <path d="M14 26v-6h4v6"/>
+          </svg>
+        </div>
+        <h3>Graduate to the real thing</h3>
+        <p>After 30 days, open a real Scotia account with your allocation already filled in. One tap and your mock TFSA becomes an actual one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE APP ============ -->
+<section class="app-section" id="app">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal">The app</span>
+      <h2 class="reveal d1">Try it now. <span class="serif pink">No download. No sign-up.</span></h2>
+      <p class="reveal d2">This is the same flow that ships in the Scotia app. Move sliders. Watch totals. Complete a lesson. Earn points.</p>
+    </div>
+
+    <div class="app-frame reveal d1">
+      <div class="app-chrome">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="url">scotia.app / scene+ invest</span>
+        <span style="width:54px"></span>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="portfolio" role="tab">Portfolio<span class="count">4</span></button>
+        <button class="tab" data-tab="invest" role="tab">Invest</button>
+        <button class="tab" data-tab="learn" role="tab">Learn<span class="count">3</span></button>
+      </div>
+
+      <div class="tab-panels">
+        <!-- ===== PORTFOLIO PANEL ===== -->
+        <div class="panel active" data-panel="portfolio">
+          <div class="bal-banner">
+            <div>
+              <div class="bal-banner-label">Scene+ points</div>
+              <div class="bal-banner-amount" id="bal-amount">14,320<small>pts</small></div>
+            </div>
+            <div class="bal-banner-gain">
+              <div class="delta">+428 pts</div>
+              <div class="sub">this month · across 4 products</div>
+            </div>
+            <button class="btn btn-primary" onclick="switchTab('invest')">Invest points
+              <svg class="arrow-r" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </button>
+          </div>
+
+          <div class="invest-grid" id="port-grid">
+            <!-- populated by JS -->
+          </div>
+
+          <div class="stats-row">
+            <div class="stat-tile">
+              <div class="lbl">Pts invested</div>
+              <div class="v t-num">12,840</div>
+            </div>
+            <div class="stat-tile">
+              <div class="lbl">Pts gained</div>
+              <div class="v t-num" style="color:var(--positive)">+428</div>
+            </div>
+            <div class="stat-tile">
+              <div class="lbl">Day streak</div>
+              <div class="v t-num">22 <span class="flame">🔥</span></div>
+            </div>
+          </div>
+
+          <div class="grad-banner">
+            <div class="grad-banner-text">
+              <span class="eyebrow">Graduation ready</span>
+              <h4>Your mock TFSA grew <em>4.2%</em>. Ready to make it real?</h4>
+            </div>
+            <button class="btn btn-primary">
+              Open real TFSA
+              <svg class="arrow-r" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- ===== INVEST PANEL ===== -->
+        <div class="panel" data-panel="invest">
+          <p class="invest-intro">Allocate your points across real Scotia products. <strong>Zero real money — just learning.</strong> Drag the sliders to see how each product behaves before you commit to anything real.</p>
+
+          <div class="alloc-summary" id="alloc-summary">
+            <div>
+              <div class="label">Allocated</div>
+              <div class="v"><span id="alloc-cur">0</span><small style="font-size:14px;color:var(--fg-3);font-weight:500;margin-left:4px">/ 14,320 pts</small></div>
+            </div>
+            <div class="progress"><div class="progress-fill" id="alloc-bar" style="width:0%"></div></div>
+            <div style="text-align:right">
+              <div class="label">Remaining</div>
+              <div class="v" id="alloc-rem">14,320</div>
+            </div>
+          </div>
+
+          <div class="warn-bar" id="warn-bar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>Whoa — that's more than you have. Dial something back.</span>
+          </div>
+
+          <div class="slider-grid" id="slider-grid">
+            <!-- populated by JS -->
+          </div>
+
+          <div class="confirm-row">
+            <button class="btn btn-ghost">Reset</button>
+            <button class="btn btn-primary">Confirm allocation
+              <svg class="arrow-r" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- ===== LEARN PANEL ===== -->
+        <div class="panel" data-panel="learn">
+          <div class="learn-head">
+            <div class="learn-head-text">
+              <strong>Points earned from learning.</strong><br>
+              Complete lessons to unlock the next one and earn Scene+ points.
+            </div>
+            <div class="learn-counter">
+              <span id="learn-counter">0</span><small>pts earned</small>
+            </div>
+          </div>
+
+          <div class="lessons" id="lessons">
+            <div class="lesson" data-lesson="0">
+              <div class="lesson-row">
+                <div class="lesson-num">01</div>
+                <div class="lesson-body">
+                  <h4>What is a TFSA and why should you care?</h4>
+                  <div class="meta"><span>2 min read</span><span class="sep">·</span><span class="reward">+150 pts</span></div>
+                </div>
+                <button class="lesson-cta start" onclick="startLesson(0)">Start →</button>
+              </div>
+              <div class="lesson-progress"><div class="lesson-progress-fill" style="width:0%"></div></div>
+              <div class="lesson-content">
+                <div class="lesson-content-inner">
+                  <h5>The short version</h5>
+                  <p>A <em class="kw">Tax-Free Savings Account</em> is the most under-used account in Canada. The government lets you put up to $7,000 a year into it, and any money you make inside it — interest, dividends, gains — you never pay tax on. Ever.</p>
+                  <p>It's not a savings account in the boring sense. Inside a TFSA you can hold cash, GICs, ETFs, or stocks. Same products, just wrapped in a tax-free shell. The TFSA is the wrapper. What's inside is up to you.</p>
+                  <p><strong>The catch:</strong> there isn't one. The only "rule" is the yearly contribution limit. Miss a year and the room rolls over.</p>
+                  <button class="btn btn-primary" onclick="completeLesson(0)" style="font-size:14px;padding:10px 18px">Mark complete · +150 pts</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="lesson locked" data-lesson="1">
+              <div class="lesson-row">
+                <div class="lesson-num">02</div>
+                <div class="lesson-body">
+                  <h4>ETFs vs mutual funds — what's actually different?</h4>
+                  <div class="meta"><span>3 min read</span><span class="sep">·</span><span class="reward">+200 pts</span></div>
+                </div>
+                <button class="lesson-cta locked" disabled>
+                  <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="10" height="7" rx="1"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>
+                  Locked
+                </button>
+              </div>
+            </div>
+
+            <div class="lesson locked" data-lesson="2">
+              <div class="lesson-row">
+                <div class="lesson-num">03</div>
+                <div class="lesson-body">
+                  <h4>Risk tolerance — what kind of investor are you?</h4>
+                  <div class="meta"><span>2 min read</span><span class="sep">·</span><span class="reward">+150 pts</span></div>
+                </div>
+                <button class="lesson-cta locked" disabled>
+                  <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="10" height="7" rx="1"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>
+                  Locked
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY SCOTIA ============ -->
+<section class="why" id="why">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow reveal">Why Scotia wins</span>
+      <h2 class="reveal d1">Wealthsimple earned trust from zero. <span class="serif">Scotia already has it.</span></h2>
+      <p class="reveal d2">Not bashing the competition — they built something great. But Scotia is starting the race with a structural advantage. Here's the gap.</p>
+    </div>
+
+    <div class="compare">
+      <div class="compare-card reveal d1">
+        <div class="name">Wealthsimple</div>
+        <h3>Built trust from zero</h3>
+        <ul class="compare-list">
+          <li><span class="ico dot">○</span> User has to download a brand new app</li>
+          <li><span class="ico dot">○</span> Connect a chequing account from somewhere else</li>
+          <li><span class="ico dot">○</span> Move real money in before learning anything</li>
+          <li><span class="ico dot">○</span> No on-ramp from existing rewards or balance</li>
+          <li><span class="ico dot">○</span> Marketing budget required to acquire each user</li>
+        </ul>
+      </div>
+      <div class="compare-card ours reveal d2">
+        <div class="name">Scotia · Scene+ Invest</div>
+        <h3>Already <em>in your pocket</em></h3>
+        <ul class="compare-list">
+          <li><span class="ico chk">✓</span> Lives inside the app 10M+ Canadians already use</li>
+          <li><span class="ico chk">✓</span> Chequing, savings, points — already connected</li>
+          <li><span class="ico chk">✓</span> Practice with points before risking real money</li>
+          <li><span class="ico chk">✓</span> Scene+ balance is the on-ramp, not a barrier</li>
+          <li><span class="ico chk">✓</span> Zero customer acquisition cost</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="compare-kicker reveal d2">
+      Wealthsimple had to earn your trust from zero. <em>Scotia already has it</em> — and your chequing account.
+    </div>
+  </div>
+</section>
+
+<!-- ============ GRADUATION ============ -->
+<section class="grad" id="graduate">
+  <div class="container">
+    <div class="grad-inner">
+      <div class="grad-text">
+        <span class="eyebrow reveal">The moment it pays off</span>
+        <h2 class="reveal d1">30 days in. <span class="serif green">A real account, ready to open.</span></h2>
+        <p class="reveal d2">After a month of mock investing, the app shows you the conversion. Your habits, your allocation, your real-world equivalent. <strong>The friction to go from learner to investor collapses to a single tap.</strong></p>
+        <a href="#app" class="btn btn-primary lg reveal d3">
+          See the flow
+          <svg class="arrow-r" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+      </div>
+
+      <div class="grad-phone reveal d2">
+        <div class="phone-notch"></div>
+        <div class="phone-status">
+          <span>9:41</span>
+          <div class="phone-icons">
+            <svg viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="8" width="3" height="4"/><rect x="4" y="5" width="3" height="7"/><rect x="8" y="2" width="3" height="10"/><rect x="12" y="0" width="3" height="12"/></svg>
+            <svg viewBox="0 0 18 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5 Q9 -2 17 5"/><path d="M4 8 Q9 3 14 8"/><circle cx="9" cy="10.5" r="0.8" fill="currentColor"/></svg>
+            <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="0.5" y="1.5" width="20" height="9" rx="2"/><rect x="2.5" y="3.5" width="14" height="5" rx="0.5" fill="currentColor"/><rect x="21.5" y="4.5" width="1.5" height="3" rx="0.5" fill="currentColor"/></svg>
+          </div>
+        </div>
+        <div class="phone-screen">
+          <div class="eyebrow" style="margin-top:8px">Day 30 · Friday</div>
+
+          <div class="grad-msg">
+            <div class="from">
+              <div class="av">S</div>
+              <div class="lb">Scene+ Invest</div>
+              <div class="tm">now</div>
+            </div>
+            <h4>You've been investing for 30 days. Your mock TFSA grew <em>4.2%</em>.</h4>
+            <p>If this was $500 real dollars, you'd have $521 today. Same products. Same allocation. Same you.</p>
+            <div class="grad-comparison">
+              <div class="col">
+                <div class="lbl">Started</div>
+                <div class="v">$500.00</div>
+              </div>
+              <div class="arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></div>
+              <div class="col">
+                <div class="lbl">Today</div>
+                <div class="v pos">$521.00</div>
+              </div>
+            </div>
+            <button class="open-btn">
+              Open my TFSA
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </button>
+            <span class="skip">Not yet · Remind me in a week</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">
+          <span class="logo-chip"><img src="data:image/png;base64,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" alt="Scene+"></span>
+          <span class="suffix">Invest</span>
+        </div>
+        <div class="footer-built">Built for Scotiabank CaseHacks 2026.</div>
+      </div>
+      <div class="footer-links">
+        <a href="#app">Portfolio</a>
+        <a href="#app">Invest</a>
+        <a href="#app">Learn</a>
+        <a href="#how">How it works</a>
+        <a href="#why">Why Scotia</a>
+        <a href="#graduate">Graduate</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Scene+™ is a trademark of Scene+ IP LP, used under license. Scotiabank® is a registered trademark of The Bank of Nova Scotia. This is a hackathon concept prototype. No real money, no real accounts. Investment returns shown are simulated. Past performance does not guarantee future results.</p>
+      <p>© 2026 · Demo</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============ Nav scrolled state ============ */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+
+/* ============ Reveal on scroll ============ */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ============ Sparkline generator ============ */
+function sparkline(values, w = 100, h = 32, color = '#23B574') {
+  const max = Math.max(...values);
+  const min = Math.min(...values);
+  const range = max - min || 1;
+  const step = w / (values.length - 1);
+  const pts = values.map((v, i) => [i * step, h - ((v - min) / range) * (h - 4) - 2]);
+  const d = pts.map((p, i) => (i === 0 ? `M${p[0].toFixed(1)},${p[1].toFixed(1)}` : `L${p[0].toFixed(1)},${p[1].toFixed(1)}`)).join(' ');
+  const area = `${d} L${w},${h} L0,${h} Z`;
+  const idStr = 'sg' + Math.random().toString(36).slice(2,7);
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="${idStr}" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0" stop-color="${color}" stop-opacity="0.22"/>
+        <stop offset="1" stop-color="${color}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="${area}" fill="url(#${idStr})"/>
+    <path d="${d}" fill="none" stroke="${color}" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
+}
+
+/* ============ Portfolio data ============ */
+const products = [
+  { id: 'tfsa', name: 'TFSA Growth Portfolio', sub: 'Diversified · Medium risk', icon: 'T', cls: '', alloc: 6200, pct: 4.2,
+    spark: [40,42,41,43,44,42,45,46,45,47,49,48,50,52] },
+  { id: 'sp500', name: 'S&P 500 ETF', sub: 'VFV.TO · Equity', icon: 'S', cls: 'etf', alloc: 4800, pct: 1.8,
+    spark: [30,31,29,32,33,32,34,33,35,36,35,36,37,38] },
+  { id: 'gic', name: '1-Year GIC', sub: 'Guaranteed · No risk', icon: 'G', cls: 'gic', alloc: 1840, pct: 0.4,
+    spark: [20,20,20.1,20.1,20.2,20.2,20.3,20.3,20.4,20.4,20.5,20.5,20.6,20.6] },
+  { id: 'bal', name: 'CDN Balanced Portfolio', sub: 'Bonds + equity · Low risk', icon: 'B', cls: 'bal', alloc: 0, pct: -0.6,
+    spark: [35,36,34,33,34,33,32,33,32,31,32,31,30,30] },
+];
+
+function renderPortfolio() {
+  const grid = document.getElementById('port-grid');
+  grid.innerHTML = products.map(p => {
+    const up = p.pct >= 0;
+    const color = up ? '#23B574' : '#FF3B48';
+    return `
+      <div class="invest-card">
+        <div class="invest-card-head">
+          <div class="asset-icon ${p.cls}">${p.icon}</div>
+          <div>
+            <div class="invest-card-name">${p.name}</div>
+            <div class="invest-card-sub">${p.sub}</div>
+          </div>
+        </div>
+        <div class="invest-card-mid">
+          <div class="invest-card-alloc">${p.alloc.toLocaleString()}<small>pts</small></div>
+          <span class="pct ${up ? 'up' : 'dn'}">${up ? '▲' : '▼'} ${Math.abs(p.pct).toFixed(1)}%</span>
+        </div>
+        ${sparkline(p.spark, 240, 36, color)}
+      </div>
+    `;
+  }).join('');
+}
+renderPortfolio();
+
+/* ============ Tabs ============ */
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === id));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.dataset.panel === id));
+}
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+/* ============ Invest sliders ============ */
+const TOTAL_PTS = 14320;
+const sliders = [
+  { id: 'tfsa',  name: 'TFSA Growth Portfolio', risk: 'Medium', riskCls: 'med', ret: '5.4%', initial: 4000, max: 14320, icon: 'T', cls: '' },
+  { id: 'sp500', name: 'S&P 500 ETF (VFV)',     risk: 'Medium', riskCls: 'med', ret: '7.8%', initial: 3200, max: 14320, icon: 'S', cls: 'etf' },
+  { id: 'gic',   name: '1-Year GIC',            risk: 'None',   riskCls: 'none', ret: '4.5%', initial: 2000, max: 14320, icon: 'G', cls: 'gic' },
+  { id: 'bal',   name: 'CDN Balanced Portfolio',risk: 'Low',    riskCls: 'low',  ret: '4.1%', initial: 1500, max: 14320, icon: 'B', cls: 'bal' },
+];
+
+function renderSliders() {
+  const grid = document.getElementById('slider-grid');
+  grid.innerHTML = sliders.map(s => `
+    <div class="slider-card">
+      <div class="slider-card-head">
+        <div style="display:flex;align-items:center;gap:10px;min-width:0">
+          <div class="asset-icon ${s.cls}" style="width:30px;height:30px;font-size:14px;border-radius:9px">${s.icon}</div>
+          <div class="slider-card-name">${s.name}</div>
+        </div>
+        <span class="badge ${s.riskCls}">${s.risk}</span>
+      </div>
+      <div class="slider-card-sub">Est. annual return <b>${s.ret}</b></div>
+      <div class="slider-row">
+        <input type="range" min="0" max="${s.max}" step="100" value="${s.initial}" data-id="${s.id}" />
+        <div class="slider-val"><span class="num" data-val="${s.id}">${s.initial.toLocaleString()}</span><small>pts</small></div>
+      </div>
+    </div>
+  `).join('');
+  grid.querySelectorAll('input[type="range"]').forEach(input => {
+    input.addEventListener('input', () => updateAllocation());
+  });
+  updateAllocation();
+}
+function updateAllocation() {
+  let total = 0;
+  document.querySelectorAll('#slider-grid input[type="range"]').forEach(input => {
+    const v = parseInt(input.value, 10);
+    total += v;
+    const valEl = document.querySelector(`[data-val="${input.dataset.id}"]`);
+    if (valEl) valEl.textContent = v.toLocaleString();
+  });
+  const rem = TOTAL_PTS - total;
+  document.getElementById('alloc-cur').textContent = total.toLocaleString();
+  document.getElementById('alloc-rem').textContent = rem.toLocaleString();
+  const pct = Math.min((total / TOTAL_PTS) * 100, 100);
+  document.getElementById('alloc-bar').style.width = pct + '%';
+  const over = total > TOTAL_PTS;
+  document.getElementById('alloc-summary').classList.toggle('over', over);
+  document.getElementById('warn-bar').classList.toggle('show', over);
+}
+renderSliders();
+
+/* ============ Learn ============ */
+const lessons = [
+  { reward: 150, complete: false, started: false },
+  { reward: 200, complete: false, started: false },
+  { reward: 150, complete: false, started: false },
+];
+let totalEarned = 0;
+
+function startLesson(idx) {
+  const card = document.querySelector(`.lesson[data-lesson="${idx}"]`);
+  if (!card || card.classList.contains('locked') || lessons[idx].complete) return;
+  lessons[idx].started = true;
+  const progress = card.querySelector('.lesson-progress');
+  const fill = card.querySelector('.lesson-progress-fill');
+  const content = card.querySelector('.lesson-content');
+  const cta = card.querySelector('.lesson-cta');
+  progress.classList.add('show');
+  // partial progress visual
+  requestAnimationFrame(() => fill.style.width = '35%');
+  content.classList.add('open');
+  cta.textContent = 'Reading…';
+  cta.disabled = true;
+  card.scrollIntoView({ block: 'center', behavior: 'smooth' });
+}
+
+function completeLesson(idx) {
+  const card = document.querySelector(`.lesson[data-lesson="${idx}"]`);
+  if (!card || lessons[idx].complete) return;
+  lessons[idx].complete = true;
+  card.classList.add('done');
+  card.querySelector('.lesson-progress-fill').style.width = '100%';
+  // swap CTA
+  const ctaWrap = card.querySelector('.lesson-row');
+  const oldCta = card.querySelector('.lesson-cta');
+  const newCta = document.createElement('button');
+  newCta.className = 'lesson-cta done';
+  newCta.innerHTML = `<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3 3 7-7"/></svg> +${lessons[idx].reward} pts`;
+  oldCta.replaceWith(newCta);
+  // hide expanded content
+  card.querySelector('.lesson-content').classList.remove('open');
+  // unlock next
+  const next = document.querySelector(`.lesson[data-lesson="${idx + 1}"]`);
+  if (next && next.classList.contains('locked')) {
+    next.classList.remove('locked');
+    const nextCta = next.querySelector('.lesson-cta');
+    nextCta.className = 'lesson-cta start';
+    nextCta.disabled = false;
+    nextCta.innerHTML = 'Start →';
+    nextCta.setAttribute('onclick', `startLesson(${idx + 1})`);
+  }
+  // animate counter
+  animateCounter(totalEarned, totalEarned + lessons[idx].reward, 700);
+  totalEarned += lessons[idx].reward;
+}
+
+function animateCounter(from, to, dur) {
+  const el = document.getElementById('learn-counter');
+  const t0 = performance.now();
+  function step(now) {
+    const t = Math.min((now - t0) / dur, 1);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const v = Math.round(from + (to - from) * eased);
+    el.textContent = v.toLocaleString();
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ============ Phone subtle parallax on mouse move ============ */
+const phoneWrap = document.querySelector('.phone-wrap');
+if (phoneWrap && window.matchMedia('(pointer:fine)').matches) {
+  const hero = document.querySelector('.hero');
+  hero.addEventListener('mousemove', (e) => {
+    const r = hero.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    phoneWrap.style.transform = `translate(${x * -8}px, ${y * -6}px)`;
+  });
+  hero.addEventListener('mouseleave', () => phoneWrap.style.transform = '');
+}
+</script>
+</body>
+</html>
